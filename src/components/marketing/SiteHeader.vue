@@ -37,7 +37,7 @@ const links = [
         >
           <AppIcon :name="theme === 'dark' ? 'sun' : 'moon'" :size="18" />
         </button>
-        <a class="dashboard-pill" href="#/dashboard">Dashboard</a>
+        <RouterLink class="dashboard-pill" to="/dashboard">Dashboard</RouterLink>
         <button
           class="icon-btn icon-btn--menu"
           type="button"

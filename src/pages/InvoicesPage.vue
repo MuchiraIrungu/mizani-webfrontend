@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import AppShell from '../layouts/AppShell.vue'
 import AppIcon from '../components/ui/AppIcon.vue'
+import SalesTabs from '../components/app/SalesTabs.vue'
 import { invoices, invoiceTotal, money, statusTone, type InvoiceStatus } from '../data/invoices'
 
 const filters = ['All', 'Pending', 'Overdue', 'Paid'] as const
@@ -26,7 +27,7 @@ const overdueShare = computed(() =>
 </script>
 
 <template>
-  <AppShell active="Sales">
+  <AppShell>
     <div class="pagehead">
       <div>
         <h1 class="pagehead__title">Invoices</h1>
@@ -37,6 +38,8 @@ const overdueShare = computed(() =>
         New Invoice
       </button>
     </div>
+
+    <SalesTabs />
 
     <!-- Summary cards -->
     <section class="summary">
@@ -82,7 +85,7 @@ const overdueShare = computed(() =>
 
       <ul class="list">
         <li v-for="invoice in rows" :key="invoice.ref">
-          <a class="row" :href="`#/sales/${invoice.ref}`">
+          <RouterLink class="row" :to="`/sales/invoice/${invoice.ref}`">
             <span class="row__mark" aria-hidden="true">{{ invoice.client.charAt(0) }}</span>
 
             <span class="row__main">
@@ -97,7 +100,7 @@ const overdueShare = computed(() =>
             <span class="pill row__status" :class="statusTone[invoice.status]">{{ invoice.status }}</span>
 
             <AppIcon name="chevronRight" :size="16" />
-          </a>
+          </RouterLink>
         </li>
       </ul>
 
@@ -139,7 +142,7 @@ const overdueShare = computed(() =>
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-3);
-  margin-bottom: var(--space-4);
+  margin: var(--space-4) 0;
 }
 
 .summary__card--danger {

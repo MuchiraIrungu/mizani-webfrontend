@@ -3,14 +3,12 @@ import { ref } from 'vue'
 import AppSidebar from '../components/app/AppSidebar.vue'
 import AppTopbar from '../components/app/AppTopbar.vue'
 
-defineProps<{ active: string }>()
-
 const navOpen = ref(false)
 </script>
 
 <template>
   <div class="shell">
-    <AppSidebar :active="active" :open="navOpen" @close="navOpen = false" />
+    <AppSidebar :open="navOpen" @close="navOpen = false" />
     <div v-if="navOpen" class="shell__scrim" @click="navOpen = false"></div>
 
     <div class="shell__main">

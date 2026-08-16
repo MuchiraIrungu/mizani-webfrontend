@@ -54,7 +54,7 @@ const kraTone: Record<Txn['kra'], string> = {
 </script>
 
 <template>
-  <AppShell active="Dashboard">
+  <AppShell>
     <!-- Page heading -->
     <div class="pagehead">
       <div>
@@ -151,7 +151,7 @@ const kraTone: Record<Txn['kra'], string> = {
               {{ filter }}
             </button>
           </div>
-          <a class="btn btn-secondary panel__view" href="#/sales">View all</a>
+          <RouterLink class="btn btn-secondary panel__view" to="/sales">View all</RouterLink>
         </div>
       </header>
 

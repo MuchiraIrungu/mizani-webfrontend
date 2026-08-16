@@ -23,12 +23,12 @@ const balance = computed(() => (invoice.value ? invoiceTotal(invoice.value) - pa
 </script>
 
 <template>
-  <AppShell active="Sales">
+  <AppShell>
     <template v-if="invoice">
-      <a class="back" href="#/sales">
+      <RouterLink class="back" to="/sales">
         <AppIcon name="chevronLeft" :size="15" />
         All invoices
-      </a>
+      </RouterLink>
 
       <div class="pagehead">
         <div>
@@ -180,7 +180,7 @@ const balance = computed(() => (invoice.value ? invoiceTotal(invoice.value) - pa
     <section v-else class="card missing">
       <h1 class="missing__title">Invoice not found</h1>
       <p>No invoice matches the reference “{{ invoiceRef }}”.</p>
-      <a class="btn btn-secondary" href="#/sales">Back to invoices</a>
+      <RouterLink class="btn btn-secondary" to="/sales">Back to invoices</RouterLink>
     </section>
   </AppShell>
 </template>

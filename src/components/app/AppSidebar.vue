@@ -1,29 +1,35 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
 import MizaniLogo from '../ui/MizaniLogo.vue'
 import AppIcon from '../ui/AppIcon.vue'
 
-defineProps<{ active: string; open?: boolean }>()
+defineProps<{ open?: boolean }>()
 defineEmits<{ (e: 'close'): void }>()
 
 /* Order is locked by the design system — do not re-sort. */
 const nav = [
-  { label: 'Dashboard', icon: 'grid', href: '#/dashboard' },
-  { label: 'Sales', icon: 'trendingUp', href: '#/sales' },
-  { label: 'Inventory', icon: 'box', href: '#/inventory' },
-  { label: 'Payroll', icon: 'users', href: '#/payroll' },
-  { label: 'KRA', icon: 'receiptCheck', href: '#/kra', badge: '2' },
-  { label: 'Suppliers', icon: 'truck', href: '#/suppliers' },
-  { label: 'Reports', icon: 'barChart', href: '#/reports' },
-  { label: 'Settings', icon: 'settings', href: '#/settings' },
+  { label: 'Dashboard', icon: 'grid', to: '/dashboard' },
+  { label: 'Sales', icon: 'trendingUp', to: '/sales' },
+  { label: 'Inventory', icon: 'box', to: '/inventory' },
+  { label: 'Payroll', icon: 'users', to: '/payroll' },
+  { label: 'KRA', icon: 'receiptCheck', to: '/kra', badge: '2' },
+  { label: 'Suppliers', icon: 'truck', to: '/suppliers' },
+  { label: 'Reports', icon: 'barChart', to: '/reports' },
+  { label: 'Settings', icon: 'settings', to: '/settings' },
 ]
+
+/* Each app route names the sidebar item it belongs to via `meta.nav`. */
+const route = useRoute()
+const active = computed(() => route.meta.nav as string | undefined)
 </script>
 
 <template>
   <aside class="sidebar" :class="{ 'is-open': open }">
     <div class="sidebar__top">
-      <a class="sidebar__brand" href="#/dashboard">
+      <RouterLink class="sidebar__brand" to="/dashboard">
         <MizaniLogo tone="light" :size="30" />
-      </a>
+      </RouterLink>
 
       <button class="sidebar__add" type="button">
         <AppIcon name="plus" :size="16" />
@@ -32,19 +38,19 @@ const nav = [
     </div>
 
     <nav class="sidebar__nav" aria-label="Main">
-      <a
+      <RouterLink
         v-for="item in nav"
         :key="item.label"
         class="navitem"
         :class="{ 'navitem--active': item.label === active }"
-        :href="item.href"
+        :to="item.to"
         :aria-current="item.label === active ? 'page' : undefined"
         @click="$emit('close')"
       >
         <AppIcon :name="item.icon" :size="18" />
         <span class="navitem__label">{{ item.label }}</span>
         <span v-if="item.badge" class="navitem__badge">{{ item.badge }}</span>
-      </a>
+      </RouterLink>
     </nav>
 
     <div class="profile">
@@ -53,9 +59,9 @@ const nav = [
         <span class="profile__name">Wanjiku Mwangi</span>
         <span class="profile__role">Owner · Nairobi</span>
       </span>
-      <button class="profile__action" type="button" aria-label="Sign out">
+      <RouterLink class="profile__action" to="/login" aria-label="Sign out">
         <AppIcon name="logout" :size="16" />
-      </button>
+      </RouterLink>
     </div>
   </aside>
 </template>

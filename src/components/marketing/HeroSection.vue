@@ -17,10 +17,10 @@ import PhoneMockups from './PhoneMockups.vue'
         </p>
 
         <div class="hero__actions">
-          <a class="btn btn-primary btn-lg" href="#/dashboard">
+          <RouterLink class="btn btn-primary btn-lg" to="/register">
             Get Started
             <AppIcon name="arrowRight" :size="18" />
-          </a>
+          </RouterLink>
           <a class="btn btn-secondary btn-lg" href="#demo">
             <AppIcon name="play" :size="18" />
             Product Demo
