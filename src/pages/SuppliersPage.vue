@@ -1,8 +1,30 @@
 <script setup lang="ts">
+import { computed, ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import AppShell from '../layouts/AppShell.vue'
 import AppIcon from '../components/ui/AppIcon.vue'
-import { owingSuppliers, suppliers, totalOwed } from '../data/suppliers'
+import PaySupplierCard from '../components/app/PaySupplierCard.vue'
+import { useSuppliersStore } from '../stores/suppliers'
 import { money } from '../data/invoices'
+
+const store = useSuppliersStore()
+const { items, payments, totalOwed, owingCount, settledCount } = storeToRefs(store)
+
+const filters = ['All', 'Owing', 'Settled'] as const
+const activeFilter = ref<(typeof filters)[number]>('All')
+
+/* Largest balance first, settled accounts last. */
+const rows = computed(() =>
+  [...items.value]
+    .filter((supplier) => {
+      if (activeFilter.value === 'Owing') return supplier.owed > 0
+      if (activeFilter.value === 'Settled') return supplier.owed === 0
+      return true
+    })
+    .sort((a, b) => b.owed - a.owed),
+)
+
+const paidToday = computed(() => payments.value.reduce((sum, payment) => sum + payment.amount, 0))
 
 const initials = (name: string) =>
   name
@@ -17,7 +39,7 @@ const initials = (name: string) =>
     <div class="pagehead">
       <div>
         <h1 class="pagehead__title">Suppliers</h1>
-        <p class="pagehead__meta">Nairobi Branch · {{ owingSuppliers.length }} accounts with a balance</p>
+        <p class="pagehead__meta">Nairobi Branch · {{ owingCount }} accounts with a balance</p>
       </div>
       <button class="btn btn-secondary pagehead__btn" type="button">
         <AppIcon name="download" :size="16" />
@@ -30,18 +52,20 @@ const initials = (name: string) =>
       <article class="card summary__card">
         <div class="summary__top">
           <p class="summary__label">Total Owed</p>
-          <span class="pill pill--warning">{{ owingSuppliers.length }} to pay</span>
+          <span class="pill pill--warning">{{ owingCount }} to pay</span>
         </div>
         <p class="summary__value tabular">{{ money(totalOwed) }}</p>
-        <p class="summary__note">Outstanding across all supplier accounts</p>
+        <p class="summary__note">
+          {{ payments.length ? `${money(paidToday)} paid in this session` : 'Outstanding across all supplier accounts' }}
+        </p>
       </article>
 
       <article class="card summary__card">
         <div class="summary__top">
           <p class="summary__label">Active Suppliers</p>
-          <span class="pill pill--success">{{ suppliers.length - owingSuppliers.length }} settled</span>
+          <span class="pill pill--success">{{ settledCount }} settled</span>
         </div>
-        <p class="summary__value tabular">{{ suppliers.length }}</p>
+        <p class="summary__value tabular">{{ items.length }}</p>
         <p class="summary__note">Suppliers ordered from in the last 90 days</p>
       </article>
     </section>
@@ -54,14 +78,21 @@ const initials = (name: string) =>
           <p class="panel__meta">Sorted by amount owed</p>
         </div>
         <div class="pill-tabs">
-          <span class="pill-tabs__item pill-tabs__item--active">All</span>
-          <span class="pill-tabs__item">Owing</span>
-          <span class="pill-tabs__item">Settled</span>
+          <button
+            v-for="filter in filters"
+            :key="filter"
+            type="button"
+            class="pill-tabs__item"
+            :class="{ 'pill-tabs__item--active': filter === activeFilter }"
+            @click="activeFilter = filter"
+          >
+            {{ filter }}
+          </button>
         </div>
       </header>
 
       <ul class="list">
-        <li v-for="supplier in suppliers" :key="supplier.id" class="row">
+        <li v-for="supplier in rows" :key="supplier.id" class="row">
           <span class="row__mark" aria-hidden="true">{{ initials(supplier.name) }}</span>
 
           <span class="row__main">
@@ -72,11 +103,16 @@ const initials = (name: string) =>
           <span v-if="supplier.owed > 0" class="row__amount tabular">{{ money(supplier.owed) }}</span>
           <span v-else class="pill pill--success row__settled">Settled</span>
 
-          <button v-if="supplier.owed > 0" class="paybtn" type="button">Pay</button>
+          <button v-if="supplier.owed > 0" class="paybtn" type="button" @click="store.openPayCard(supplier.id)">
+            Pay
+          </button>
           <span v-else class="row__spacer" aria-hidden="true"></span>
         </li>
       </ul>
     </section>
+
+    <!-- Pay card -->
+    <PaySupplierCard />
 
     <!-- Floating action -->
     <button class="btn btn-primary fab" type="button">
@@ -175,6 +211,12 @@ const initials = (name: string) =>
   margin: 2px 0 0;
   font-size: var(--fs-small);
   color: var(--color-text-secondary);
+}
+
+.pill-tabs__item {
+  border: none;
+  background: transparent;
+  cursor: pointer;
 }
 
 .list {

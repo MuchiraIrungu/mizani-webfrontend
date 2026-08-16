@@ -39,7 +39,19 @@ Because this is history mode, any host serving the built site needs an SPA
 fallback rewriting unknown paths to `index.html`. `vite dev` and `vite preview`
 already do.
 
-All screen data currently comes from `src/data/*.ts` fixtures.
+## State
+
+[Pinia](https://pinia.vuejs.org) — stores live in `src/stores/`.
+
+`useSuppliersStore` owns supplier balances, the payments log and the pay-card
+state (which supplier is open, request status, last receipt). `paySupplier()`
+validates the amount against the balance, simulates the payments call, then
+decrements the balance and prepends a receipt — so the summary cards, the list
+row and the "Settled" pill all update from one place. Replace the `setTimeout`
+in that action with `POST /api/payments/suppliers` when the backend lands.
+
+Everything else still reads its fixtures from `src/data/*.ts`; move a module
+into a store when its state starts being written from more than one screen.
 
 ## Design system
 
