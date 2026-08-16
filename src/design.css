@@ -1,0 +1,182 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap');
+ 
+:root {
+  /* Color */
+  --color-primary: #0A5C36;
+  --color-primary-dark: #063D24;
+  --color-primary-light: #E6F2EB;   /* pale tint — pill backgrounds, bands */
+  --color-bg: #FFFFFF;
+  --color-surface: #F7F9F8;
+  --color-border: #D9DEDB;
+  --color-text-primary: #111827;
+  --color-text-secondary: #4B5563;
+  --color-warning: #D97706;
+  --color-warning-bg: #FEF3E2;
+  --color-danger: #DC2626;
+  --color-danger-bg: #FDECEC;
+  --color-success: #0A5C36;
+  --color-success-bg: #E6F2EB;
+ 
+  /* Typography */
+  --font-sans: 'Lexend', sans-serif;
+  --fs-hero: 44px;
+  --fs-h1: 32px;
+  --fs-h2: 24px;
+  --fs-h3: 18px;
+  --fs-body: 15px;
+  --fs-small: 13px;
+  --lh-body: 1.6;
+ 
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --space-6: 48px;
+  --space-7: 80px;
+ 
+  /* Borders / radius — border-box style, never shadow */
+  --radius-card: 12px;
+  --radius-pill: 999px;
+  --radius-btn: 8px;
+  --border-width: 1px;
+}
+ 
+* { box-sizing: border-box; }
+ 
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  background: var(--color-bg);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  margin: 0;
+}
+ 
+h1, h2, h3 { font-weight: 600; margin: 0 0 var(--space-2); }
+h1 { font-size: var(--fs-hero); }
+h2 { font-size: var(--fs-h1); }
+h3 { font-size: var(--fs-h2); }
+p  { color: var(--color-text-secondary); margin: 0 0 var(--space-3); }
+ 
+/* ---- Cards & sections — border-box distinction only ---- */
+.card {
+  background: var(--color-bg);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+}
+.card--accent { border-color: var(--color-primary); }
+.card--dark   { background: var(--color-primary-dark); color: #FFFFFF; border: none; }
+ 
+.section {
+  padding: var(--space-7) var(--space-4);
+  border-top: var(--border-width) solid var(--color-border);
+}
+.section--dark  { background: var(--color-primary-dark); color: #FFFFFF; border-top: none; }
+.section--tint  { background: var(--color-primary-light); border-top: none; }
+ 
+/* ---- Pills — status tags, filter chips, trend indicators ---- */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  border: var(--border-width) solid var(--color-border);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  background: var(--color-surface);
+}
+.pill--active  { background: var(--color-primary); border-color: var(--color-primary); color: #FFFFFF; }
+.pill--success { background: var(--color-success-bg); border-color: var(--color-success); color: var(--color-success); }
+.pill--warning { background: var(--color-warning-bg); border-color: var(--color-warning); color: var(--color-warning); }
+.pill--danger  { background: var(--color-danger-bg);  border-color: var(--color-danger);  color: var(--color-danger); }
+ 
+/* Pill tabs — segmented control, e.g. M-Pesa / Cash / Bank toggle */
+.pill-tabs {
+  display: inline-flex;
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 3px;
+  gap: 2px;
+}
+.pill-tabs__item {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+}
+.pill-tabs__item--active { background: var(--color-primary); color: #FFFFFF; }
+ 
+/* ---- Buttons — solid fill or outlined, never shadowed ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-btn);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--fs-body);
+  border: var(--border-width) solid transparent;
+  cursor: pointer;
+}
+.btn-primary   { background: var(--color-primary); color: #FFFFFF; }
+.btn-secondary { background: transparent; color: var(--color-text-primary); border-color: var(--color-border); }
+ 
+/* ---- Tables — bordered rows, no zebra shadow ---- */
+.table { width: 100%; border-collapse: collapse; }
+.table th {
+  text-align: left;
+  font-size: var(--fs-small);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+.table td {
+  padding: var(--space-3);
+  border-bottom: var(--border-width) solid var(--color-border);
+  font-size: var(--fs-body);
+}
+ 
+/* ==========================================================================
+   Theme variants — switch via data-theme="simba" | "bahari" | "dark" on
+   <html> or <body>. Only accent tokens change per theme; borders/surfaces
+   stay neutral except Dark, which needs its own background/text pair.
+   ========================================================================== */
+ 
+/* Simba — red/white */
+[data-theme="simba"] {
+  --color-primary: #B91C1C;
+  --color-primary-dark: #7F1414;
+  --color-primary-light: #FBEAEA;
+}
+ 
+/* Bahari — flat blue, no gradient */
+[data-theme="bahari"] {
+  --color-primary: #0B4F6C;
+  --color-primary-dark: #063347;
+  --color-primary-light: #E7F0F4;
+}
+ 
+/* Dark — a real dark mode, not just a color swap */
+[data-theme="dark"] {
+  --color-bg: #14181A;
+  --color-surface: #1C2124;
+  --color-border: #2A3033;
+  --color-text-primary: #F3F4F4;
+  --color-text-secondary: #A9B0B3;
+  --color-primary: #22C55E;        /* brighter green — the forest shade loses contrast on dark backgrounds */
+  --color-primary-dark: #16A34A;
+  --color-primary-light: #16311F;  /* dark-mode pill background, not a pale tint */
+  --color-warning-bg: #3A2A14;
+  --color-danger-bg: #3A1A1A;
+  --color-success-bg: #16311F;
+}
