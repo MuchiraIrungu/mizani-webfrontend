@@ -1,0 +1,22 @@
+/* ==========================================================================
+   Logged-in app shell tokens. The sidebar stays dark green in every theme —
+   it is the one fixed surface in the product.
+   ========================================================================== */
+
+:root {
+  --sidebar-w: 248px;
+  --sidebar-bg: #063d24;
+  --sidebar-text: rgba(255, 255, 255, 0.74);
+  --sidebar-border: rgba(255, 255, 255, 0.16);
+  --sidebar-active: rgba(255, 255, 255, 0.12);
+  --topbar-h: 64px;
+}
+
+[data-theme='dark'] {
+  --sidebar-bg: #0c2118;
+}
+
+/* Data cell numerals line up column to column */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MizaniLogo from './MizaniLogo.vue'
+import MizaniLogo from '../ui/MizaniLogo.vue'
 
 const columns = [
   {

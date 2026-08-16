@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AppIcon from './AppIcon.vue'
+import AppIcon from '../ui/AppIcon.vue'
 
 const points = [
   { icon: 'clock', text: '11 hours a week returned to owners who drop manual books' },

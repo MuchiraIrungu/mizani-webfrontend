@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import MizaniLogo from './MizaniLogo.vue'
-import AppIcon from './AppIcon.vue'
+import MizaniLogo from '../ui/MizaniLogo.vue'
+import AppIcon from '../ui/AppIcon.vue'
 import { useTheme } from '../../composables/useTheme'
 
 const { theme, toggleTheme } = useTheme()
@@ -37,7 +37,7 @@ const links = [
         >
           <AppIcon :name="theme === 'dark' ? 'sun' : 'moon'" :size="18" />
         </button>
-        <a class="dashboard-pill" href="#dashboard">Dashboard</a>
+        <a class="dashboard-pill" href="#/dashboard">Dashboard</a>
         <button
           class="icon-btn icon-btn--menu"
           type="button"

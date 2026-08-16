@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AppIcon from './AppIcon.vue'
+import AppIcon from '../ui/AppIcon.vue'
 import PhoneMockups from './PhoneMockups.vue'
 </script>
 
@@ -17,7 +17,7 @@ import PhoneMockups from './PhoneMockups.vue'
         </p>
 
         <div class="hero__actions">
-          <a class="btn btn-primary btn-lg" href="#dashboard">
+          <a class="btn btn-primary btn-lg" href="#/dashboard">
             Get Started
             <AppIcon name="arrowRight" :size="18" />
           </a>

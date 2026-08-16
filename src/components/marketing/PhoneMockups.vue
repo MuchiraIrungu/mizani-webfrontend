@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AppIcon from './AppIcon.vue'
+import AppIcon from '../ui/AppIcon.vue'
 
 const dashboardFeed = [
   { name: 'Till 5482 — Naivas', meta: 'M-Pesa · 14:22', amount: '+12,400', tag: 'Settled', tone: 'success' },
