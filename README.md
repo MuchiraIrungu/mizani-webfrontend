@@ -1,98 +1,192 @@
-# Mizani — web frontend
+# Mizani Web Frontend
 
-Vue 3 + TypeScript + Vite. One dashboard for sales, stock, payroll and KRA
-compliance, built for Kenyan SMEs.
+Mizani is a business operations platform designed for Kenyan SMEs and retail businesses. The web frontend provides a modern dashboard for managing sales, inventory, payroll, suppliers, compliance, and operational reporting from a single interface.
+
+This project is built with Vue 3, TypeScript, and Vite, with a strong emphasis on dashboard UX, modular state management, and a clean design system.
+
+## Overview
+
+Mizani brings together the core business workflows that small businesses usually manage across disconnected tools:
+
+- Sales and invoices
+- Inventory and stock visibility
+- Payroll and payouts
+- Supplier payments
+- KRA and compliance workflows
+- Reporting and operational insights
+
+The frontend is structured as a single-page application with route-driven screens and a reusable app shell.
+
+## Tech Stack
+
+- Vue 3
+- TypeScript
+- Vite
+- Vue Router
+- Pinia
+- Tailwind-inspired design tokens and CSS primitives
+
+## Key Features
+
+- Sales dashboard and invoice management
+- Customer and supplier management
+- Inventory oversight
+- Payroll and payout workflows
+- KRA / eTIMS compliance support
+- Reports for revenue, expenses, and operational trends
+- Theme support with light/dark and brand variations
+- Route-based navigation with clear app sections
+
+## Application Structure
+
+```bash
+mizani-webfrontend/
+├── public/              # Static assets
+├── src/
+│   ├── components/      # Reusable UI components
+│   ├── composables/     # Reusable logic and hooks
+│   ├── data/            # Local mock data fixtures
+│   ├── design.css       # Design system tokens
+│   ├── router/          # Vue Router configuration
+│   ├── stores/          # Pinia stores
+│   ├── styles/          # App and marketing theme styles
+│   ├── App.vue          # Root app component
+│   ├── main.ts          # App bootstrap
+│   └── ...
+├── .env.example         # Example environment file
+├── index.html           # Entry HTML file
+├── package.json          # Scripts and dependencies
+├── tsconfig.json         # TypeScript config
+├── vite.config.ts       # Vite config
+├── README.md            # Documentation
+└── .gitignore
+```
+
+## Route Overview
+
+The app uses Vue Router in HTML5 history mode. Main routes include:
+
+| Path | Screen |
+|---|---|
+| `/` | Marketing homepage |
+| `/login` | Login |
+| `/register` | Registration |
+| `/dashboard` | Dashboard |
+| `/sales` | Invoices /
+| `/sales/invoice/:invoiceRef` | Invoice detail |
+| `/sales/customers` | Customer list |
+| `/sales/customers/:customerId` | Customer detail |
+| `/inventory` | Inventory |
+| `/payroll` | Payroll |
+| `/kra` | KRA compliance |
+| `/suppliers` | Suppliers |
+| `/reports` | Reports |
+| `/settings` | Settings |
+
+All routes are organized around app navigation metadata for consistent sidebar state and page titles.
+
+## State Management
+
+Pinia is used for application state. Stores are designed to centralize logic for business modules such as:
+
+- supplier balances and supplier payment flow
+- inventory state
+- sales and reporting state
+- UI state for open panels and active selections
+
+This keeps the app easier to scale as more screens begin to manipulate shared business data.
+
+## Design System
+
+The design system is intentionally opinionated and centralized in `src/design.css`. It defines:
+
+- color palette
+- typography scale
+- spacing and layout rules
+- card, table, pill, and button styles
+- theme support via `data-theme` attributes
+
+The frontend ships with a few theme variants such as `light`, `dark`, `simba`, and `bahari`, making it easy to brand the product for different contexts.
+
+## Google Sign-In
+
+The app supports Google OAuth 2.0 authorization code flow via Google Identity Services. The browser receives a one-time code and the backend exchanges it for session cookies.
+
+### Local setup
+
+1. Create a Google OAuth client in Google Cloud Console
+2. Add your web origin (for example `http://localhost:5173`)
+3. Copy `.env.example` to `.env.local`
+4. Set:
+
+```env
+VITE_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
+VITE_AUTH_ENDPOINT=/api/auth/google
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm
+
+### Install dependencies
 
 ```bash
 npm install
+```
+
+### Run the app locally
+
+```bash
 npm run dev
 ```
 
-## Routes
+### Production build
 
-vue-router in HTML5 history mode — `src/router/index.ts`. Every app screen is
-lazy-loaded, so the marketing homepage ships on its own bundle.
+```bash
+npm run build
+```
 
-| Path | Name | Screen |
-|---|---|---|
-| `/` | `home` | Marketing homepage |
-| `/login` · `/register` | `login` · `register` | Auth screens |
-| `/dashboard` | `dashboard` | Dashboard |
-| `/sales` | `invoices` | Invoices list |
-| `/sales/invoice/:invoiceRef` | `invoice` | Invoice detail |
-| `/sales/customers` | `customers` | Customers list |
-| `/sales/customers/:customerId` | `customer` | Customer detail |
-| `/inventory` | `inventory` | Inventory |
-| `/payroll` | `payroll` | Payroll + payout sheet |
-| `/kra` | `kra` | KRA filing + eTIMS compliance |
-| `/suppliers` | `suppliers` | Suppliers |
-| `/reports` | `reports` | Reports (revenue trend, expense breakdown) |
-| `/settings` | `settings` | Settings |
-| anything else | — | redirects to `/` |
+### Preview production build
 
-Each app route carries `meta.nav` (the sidebar item it belongs to) and
-`meta.title` (the document title). `AppSidebar` reads `meta.nav` to set its
-active item, so no page passes its own nav state. Route params are delivered as
-component props (`props: true`).
+```bash
+npm run preview
+```
 
-Because this is history mode, any host serving the built site needs an SPA
-fallback rewriting unknown paths to `index.html`. `vite dev` and `vite preview`
-already do.
+## Project Notes
 
-## State
+- The app is designed for a front-end-first workflow while the backend APIs are still being connected.
+- Several modules still use local fixture data before being wired to a live backend.
+- Route metadata and stores are organized so app state can move from mock data to real API responses without major rework.
 
-[Pinia](https://pinia.vuejs.org) — stores live in `src/stores/`.
+## Scripts
 
-`useSuppliersStore` owns supplier balances, the payments log and the pay-card
-state (which supplier is open, request status, last receipt). `paySupplier()`
-validates the amount against the balance, simulates the payments call, then
-decrements the balance and prepends a receipt — so the summary cards, the list
-row and the "Settled" pill all update from one place. Replace the `setTimeout`
-in that action with `POST /api/payments/suppliers` when the backend lands.
+```bash
+npm run dev
+npm run build
+npm run preview
+```
 
-Everything else still reads its fixtures from `src/data/*.ts`; move a module
-into a store when its state starts being written from more than one screen.
+## License
 
-## Design system
+Copyright (c) 2026 MuchiraIrungu
 
-`src/design.css` is the locked token set — colours, Lexend type scale, spacing,
-and the card / pill / button / table primitives. `src/styles/marketing.css` adds
-the marketing layout helpers, `src/styles/app.css` the app-shell tokens, chart
-ramp and form primitives. Themes switch through `data-theme` on `<html>`
-(`light` default, plus `dark`, `simba`, `bahari`).
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-Chart colours are a single-hue ordinal green ramp validated for monotone
-lightness, adjacent step separation and light-end contrast in both light and
-dark modes.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-## Google sign-in
-
-The frontend runs the OAuth 2.0 **authorization-code** flow via Google Identity
-Services (`src/composables/useGoogleAuth.ts`). The browser only ever receives a
-one-time code; the backend exchanges it using the client secret and sets an
-httpOnly session cookie.
-
-1. Google Cloud Console → APIs & Services → Credentials → **Create OAuth client
-   ID** → *Web application*.
-2. Under **Authorised JavaScript origins** add your dev origin
-   (`http://localhost:5173`) and your production origin.
-3. Copy `.env.example` to `.env.local` and fill in:
-
-   ```
-   VITE_GOOGLE_CLIENT_ID=<client id>.apps.googleusercontent.com
-   VITE_AUTH_ENDPOINT=/api/auth/google
-   ```
-
-4. Implement the backend route:
-
-   ```
-   POST /api/auth/google   { code, redirect_uri: "postmessage" }
-   ```
-
-   It should POST to `https://oauth2.googleapis.com/token` with the client ID,
-   client secret, `grant_type=authorization_code` and `redirect_uri=postmessage`,
-   verify the returned `id_token`, then set the session cookie.
-
-Until `VITE_GOOGLE_CLIENT_ID` is set the button reports that sign-in is not
-configured rather than failing silently. The email/password forms are wired to
-`/api/auth/login` and `/api/auth/register` and currently show the same notice.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
